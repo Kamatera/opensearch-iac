@@ -3,5 +3,5 @@ RUN bin/logstash-plugin install logstash-codec-sflow
 RUN bin/logstash-plugin install logstash-output-opensearch
 RUN rm /usr/share/logstash/pipeline/logstash.conf
 RUN echo xpack.monitoring.enabled: false > /usr/share/logstash/config/logstash.yml
-RUN echo log.level: debug >> /usr/share/logstash/config/logstash.yml
 COPY sflow-pipeline.conf /usr/share/logstash/pipeline/sflow-pipeline.conf
+ENV LOG_LEVEL=error

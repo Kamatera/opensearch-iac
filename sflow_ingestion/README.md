@@ -1,13 +1,29 @@
 # Sflow Ingestion Example
 
+On OpenSearch - create a DataStream:
+
+* Index Management > Templates > Create template
+  * Template name: sflow
+  * Template type: Data streams
+  * Time field: @timestamp
+  * Index pattern: sflow-*
+  * Primary shards: 3
+  * Replica shards: 3
+  * Create template
+* Data Streams > Create data stream
+  * Data stream name: sflow-datastream
+  * Template: sflow
+  * Create data stream
+
+Start logstash
+
 ```
 cd sflow_ingestion
-docker compose up -d --build --force-recreate
+docker compose up --build
 ```
 
-Send TCP data from .pcap file
+Send sflow data from pcap file:
 
 ```
-tcprewrite --dstipmap=192.168.0.241:127.0.0.1 -i file.pcap -o file_modified.pcap
-tcpreplay -i lo file_modified.pcap
+sudo venv/bin/python sflow_ingestion/generate_sflow.py
 ```
