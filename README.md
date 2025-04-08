@@ -191,6 +191,7 @@ plugins.security.nodes_dn:
   - CN=nopensad1,O=KAMATERA
 cluster.name: nopensad
 node.name: <SERVER_NAME>
+cluster.remote.nopens.seeds: ["nopens1:9200","nopens2:9200","nopens3:9200"]
 " > /etc/opensearch/opensearch.yml
 
 # change -Xms / -Xmx to -Xms32g -Xmx32g (half RAM size)
@@ -219,11 +220,17 @@ openssl x509 -req -in ${SERVERNAME}.csr -CA root-ca.pem -CAkey root-ca-key.pem -
 rm -f *temp.pem *csr *ext &&\
 chown opensearch:opensearch ${SERVERNAME}-key.pem ${SERVERNAME}.pem
 
-# set to the IP of the host
+# set to the IP of the hosts
 echo '
 1.2.3.4 nopensad1
+1.2.3.4 nopens1
+1.2.3.4 nopens2
+1.2.3.4 nopens3
 ' >> /etc/hosts
 ```
+
+SSH to each of the nopens* servers and modify their opensearch.yml to add the following to `plugins.security.nodes_dn:`:
+`- CN=nopensad1,O=KAMATERA`, then restart opensearch on them
 
 Start opensearch on the server
 
